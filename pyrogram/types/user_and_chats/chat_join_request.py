@@ -1,5 +1,5 @@
 #  Pyrogram - Telegram MTProto API Client Library for Python
-#  Copyright (C) 2017-2021 Dan <https://github.com/delivrance>
+#  Copyright (C) 2017-present Dan <https://github.com/delivrance>
 #
 #  This file is part of Pyrogram.
 #
@@ -79,4 +79,60 @@ class ChatJoinRequest(Object, Update):
             bio=update.about,
             invite_link=types.ChatInviteLink._parse(client, update.invite, users),
             client=client
+        )
+
+    async def approve(self) -> bool:
+        """Bound method *approve* of :obj:`~pyrogram.types.ChatJoinRequest`.
+        
+        Use as a shortcut for:
+        
+        .. code-block:: python
+
+            client.approve_chat_join_request(
+                chat_id=request.chat.id,
+                user_id=request.from_user.id
+            )
+            
+        Example:
+            .. code-block:: python
+
+                request.approve()
+                
+        Returns:
+            ``bool``: True on success.
+        
+        Raises:
+            RPCError: In case of a Telegram RPC error.
+        """
+        return await self._client.approve_chat_join_request(
+            chat_id=self.chat.id,
+            user_id=self.from_user.id
+        )
+
+    async def decline(self) -> bool:
+        """Bound method *decline* of :obj:`~pyrogram.types.ChatJoinRequest`.
+        
+        Use as a shortcut for:
+        
+        .. code-block:: python
+
+            client.decline_chat_join_request(
+                chat_id=request.chat.id,
+                user_id=request.from_user.id
+            )
+            
+        Example:
+            .. code-block:: python
+
+                request.decline()
+                
+        Returns:
+            ``bool``: True on success.
+        
+        Raises:
+            RPCError: In case of a Telegram RPC error.
+        """
+        return await self._client.decline_chat_join_request(
+            chat_id=self.chat.id,
+            user_id=self.from_user.id
         )
