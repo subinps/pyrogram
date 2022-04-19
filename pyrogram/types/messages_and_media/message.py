@@ -1682,8 +1682,7 @@ class Message(Object, Update):
         result_id: str,
         quote: bool = None,
         disable_notification: bool = None,
-        reply_to_message_id: int = None,
-        hide_via: bool = None
+        reply_to_message_id: int = None
     ) -> "Message":
         """Bound method *reply_inline_bot_result* of :obj:`~pyrogram.types.Message`.
 
@@ -1721,9 +1720,6 @@ class Message(Object, Update):
             reply_to_message_id (``bool``, *optional*):
                 If the message is a reply, ID of the original message.
 
-            hide_via (``bool``):
-                Sends the message with *via @bot* hidden.
-
         Returns:
             On success, the sent Message is returned.
 
@@ -1741,8 +1737,7 @@ class Message(Object, Update):
             query_id=query_id,
             result_id=result_id,
             disable_notification=disable_notification,
-            reply_to_message_id=reply_to_message_id,
-            hide_via=hide_via
+            reply_to_message_id=reply_to_message_id
         )
 
     async def reply_location(
@@ -3299,6 +3294,42 @@ class Message(Object, Update):
                 raise ValueError("This button is not supported yet")
         else:
             await self.reply(button, quote=quote)
+
+    async def react(self, emoji: str = "") -> bool:
+        """Bound method *react* of :obj:`~pyrogram.types.Message`.
+
+        Use as a shortcut for:
+
+        .. code-block:: python
+
+            client.send_reaction(
+                chat_id=chat_id,
+                message_id=message.message_id,
+                emoji="🔥"
+            )
+
+        Example:
+            .. code-block:: python
+
+                message.react(emoji="🔥")
+
+        Parameters:
+            emoji (``str``, *optional*):
+                Reaction emoji.
+                Pass "" as emoji (default) to retract the reaction.
+
+        Returns:
+            ``bool``: On success, True is returned.
+
+        Raises:
+            RPCError: In case of a Telegram RPC error.
+        """
+
+        return await self._client.send_reaction(
+            chat_id=self.chat.id,
+            message_id=self.message_id,
+            emoji=emoji
+        )
 
     async def retract_vote(
         self,
